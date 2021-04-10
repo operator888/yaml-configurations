@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+   db:
+     image: mysql:5.7   #Here we define the mysql version we want to use
+     volumes:
+       - db_data:/var/lib/mysql    #Here we define a volume to be used for db data persistency 
+     restart: always   #If the container fails for some reason, it will auto-restart
+     environment:
+       MYSQL_ROOT_PASSWORD: ${MYSQL_DATABASE_PASSWORD}   #You can use your own password
+       MYSQL_DATABASE: wordpress
+       MYSQL_USER: wordpress
+       MYSQL_PASSWORD: wordpress   #You can use your own password
+
+   wordpress:
+     image: wordpress:latest   #Here you can also specify a version like wordpress:5.2 for example
+     ports:
+       - 80     #Here you also choose another port.
+     restart: always
+     environment:
+       WORDPRESS_DB_HOST: db:3306   #Standard mysql port
+       WORDPRESS_DB_USER: wordpress   #Choose your own username
+       WORDPRESS_DB_PASSWORD: wordpress   #Choose your own password
+
+volumes:
+    db_data:   #This will be the volume to store the data for persistency.
